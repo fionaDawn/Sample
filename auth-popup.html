@@ -6,6 +6,8 @@
 <script>
 var t = TrelloPowerUp.iframe();
 var myAuth = function() {
+
+  console.log('test');
   t.authorize(function(secret) {
         return './auth-window.html?secret=' + secret;
   })
