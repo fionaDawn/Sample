@@ -27,7 +27,7 @@ var authenticationSuccess = function() {
 		secret: getURLParameter('secret')
 	});
 	IO.request('value', JSON.stringify(Trello.token()))
-	.timeout(1000)
+	.timeout(250)
 	.then(function(){
 			window.close();
 	});
