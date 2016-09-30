@@ -38,6 +38,7 @@ var authenticationFailure = function() {
 
 
 var authorize = function() {
+	console.log('Authorize: ' + getURLParameter('secret'))
 	Trello.authorize({
 	  type: "popup",
 	  name: "Getting Started Application",
