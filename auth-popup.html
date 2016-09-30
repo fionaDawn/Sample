@@ -12,10 +12,7 @@ var t = TrelloPowerUp.iframe();
 var Promise = TrelloPowerUp.Promise;
 var secret;
 var authenticationSuccess = function() {
-  return timeout(1000)
-  .then(function() {
-    t.set('organization', 'private', 'token', Trello.token())
-  })
+  return t.set('organization', 'private', 'token', Trello.token())
   .catch(t.NotHandled, function(){
     return t.set('board', 'private', 'token', Trello.token())
   })
