@@ -9,9 +9,13 @@
 <script src="https://trello.com/1/client.js?key=a267df60cf977e2cba2f06aee16c8e0e"></script>
 <script>
 var t = TrelloPowerUp.iframe();
+var Promise = TrelloPowerUp.Promise;
 var secret;
 var authenticationSuccess = function() {
-  return t.set('organization', 'private', 'token', Trello.token())
+  return timeout(1000)
+  .then(function() {
+    t.set('organization', 'private', 'token', Trello.token())
+  })
   .catch(t.NotHandled, function(){
     return t.set('board', 'private', 'token', Trello.token())
   })
@@ -25,21 +29,33 @@ var authenticationFailure = function() {
 };
 
 var myAuth = function() {
-
-  t.authorize(function(secret) {
-      console.log(secret);
-      return Trello.authorize({
-    	  type: "popup",
-    	  name: "Getting Started Application",
-    	  scope: {
-    	    read: true,
-    	    write: true },
-    	  expiration: "never",
-    	  success: authenticationSuccess,
-    	  error: authenticationFailure
-    	});
-      // return './auth-window.html?secret=' + secret;
-  });
+  return Promise.all([
+    t.get('organization', 'private', 'token'),
+    t.get('board', 'private', 'token')
+  ])
+  .spread(function(token, savedToken){
+    if(token && /[a-z]+/.test(token)){
+      console.log("OrgToken: " + token);
+    } else if(savedToken && /[a-z]+/.test(savedToken)){
+      console.log("BoardToken: " + token);
+    }
+  })
+  .then(function(){
+    t.authorize(function(secret) {
+        console.log(secret);
+        return Trello.authorize({
+      	  type: "popup",
+      	  name: "Getting Started Application",
+      	  scope: {
+      	    read: true,
+      	    write: true },
+      	  expiration: "never",
+      	  success: authenticationSuccess,
+      	  error: authenticationFailure
+      	});
+        // return './auth-window.html?secret=' + secret;
+    });
+  })
 };
 </script>
 
